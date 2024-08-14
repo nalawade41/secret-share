@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-    TextField,
-    Button,
-    Typography,
     MenuItem,
     Select,
     InputLabel,
     FormControl,
-    SelectChangeEvent
+    type SelectChangeEvent,
+    FormGroup,
+    colors,
 } from '@mui/material';
-import './index.css';
-import {SecretFormProps, SecretFormData} from "../../types/components/secretForm";
+import type {SecretFormProps, SecretFormData} from "../../types/components/secretForm";
 import {expirationOptions} from "../../constants/constant";
-
+import StyledButton from '../Button';
+import StyledTextField from '../TextField';
 
 const SecretForm: React.FC<SecretFormProps> = ({ onFormSubmit }) => {
     const [formData, setFormData] = useState<SecretFormData>({
@@ -25,7 +24,7 @@ const SecretForm: React.FC<SecretFormProps> = ({ onFormSubmit }) => {
         const { name, value } = event.target;
         setFormData(prev => ({
             ...prev,
-            [name]: value,
+            [name]: name === 'expireAfterViews' ? parseInt(value) : value,
         }));
     };
 
@@ -44,57 +43,56 @@ const SecretForm: React.FC<SecretFormProps> = ({ onFormSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="secret-form">
-            <Typography gutterBottom className={"header-title"}>
-                Let's get your secret salted
-            </Typography>
-            <TextField
-                label="Your secret"
-                variant="outlined"
-                name="secret"
-                multiline
-                fullWidth
-                rows={4}
-                value={formData.secret}
-                onChange={handleInputChange}
-                required
-                inputProps={{maxLength: 500}}
-            />
-            <FormControl fullWidth>
-                <InputLabel id="expire-label">Expires in</InputLabel>
-                <Select
-                    labelId="expire-label"
-                    value={formData.expireAfter}
-                    label="Expires in"
-                    name="expireAfter"
-                    onChange={handleSelectChange}
-                >
-                    {expirationOptions.map(option => (
-                        <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <TextField
-                label="Allowed Viwes"
-                variant="outlined"
-                name="expireAfterViews"
-                fullWidth
-                value={formData.expireAfterViews}
-                onChange={handleInputChange}
-                required
-                type="number"
-            />
-            <Button type="submit" variant="contained" sx={{
-                backgroundColor: "#637a8a",
-                color: "#fff",
-                marginTop: "0.4rem",
-                fontWeight: "800"
-            }}>
-                Share Your Secret!
-            </Button>
-    </form>
+        <form onSubmit={handleSubmit}>
+            <FormGroup sx={{ gap: 4 }}>
+                <StyledTextField
+                    label="Your secret"
+                    placeholder='Type your secret here...'
+                    variant="outlined"
+                    name="secret"
+                    multiline
+                    fullWidth
+                    rows={6}
+                    value={formData.secret}
+                    onChange={handleInputChange}
+                    required
+                    inputProps={{
+                        maxLength: 500,
+                        style: { color: colors.grey[700], fontWeight: 700 },
+                    }}
+                />
+                <FormControl fullWidth>
+                    <InputLabel id="expire-label" style={{fontSize: '1.2rem', fontWeight: 'bold'}}>Expires in</InputLabel>
+                    <Select
+                        labelId="expire-label"
+                        value={formData.expireAfter}
+                        label="Expires in"
+                        name="expireAfter"
+                        sx={{ bgcolor: "#b7d3d1" }}
+                        onChange={handleSelectChange}
+                    >
+                        {expirationOptions.map(option => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <StyledTextField
+                    label="Allowed Viwes"
+                    variant="outlined"
+                    name="expireAfterViews"
+                    fullWidth
+                    value={formData.expireAfterViews}
+                    onChange={handleInputChange}
+                    required
+                    type="number"
+                />
+                <StyledButton type="submit" variant="contained">
+                    Share Your Secret!
+                </StyledButton>
+            </FormGroup>
+        </form>
   );
 };
 

@@ -1,8 +1,17 @@
-import React from "react";
-import { Box, Button, Drawer, Stack, TextareaAutosize } from "@mui/material";
+import { Box, Drawer, Stack, TextareaAutosize, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import StyledButton, { CloseButton } from "../Button";
+import CloseIcon from "@mui/icons-material/Close";
 
-const Sidebar: React.FC<SidebarProps> = ({ open, setOpen, data, reShare }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+    open,
+    setOpen,
+    data,
+    reShare,
+    title,
+    subTitle,
+    isPersisted,
+}) => {
     const navigate = useNavigate();
 
     const toggleDrawer = (state: boolean) => () => {
@@ -21,26 +30,34 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen, data, reShare }) => {
     };
 
     return (
-        <Drawer open={open} onClose={toggleDrawer(false)} variant='persistent'>
-            <Box sx={{ width: 420, maxWidth: "100%", p: 2 }} role="presentation">
-                <Stack sx={{ gap: 4 }}>
-                    <Box>
-                        <h1>Voila!</h1>
-                        <p>Secret Revealed.</p>
-                    </Box>
+        <Drawer
+            open={open}
+            onClose={toggleDrawer(false)}
+            variant={isPersisted ? "persistent" : "temporary"}
+        >
+            {!isPersisted &&
+                <CloseButton onClick={toggleDrawer(false)}>
+                    <CloseIcon/>
+                </CloseButton>}
+            <Box sx={{ width: 380, maxWidth: "100%", p: 4 }} role="presentation">
+                <Stack gap={4} justifyContent="center">
+                    <Stack justifyContent="center" alignItems="center">
+                        <Typography variant="header">{title}</Typography>
+                        <Typography variant="subtitle">{subTitle}</Typography>
+                    </Stack>
                     <TextareaAutosize
                         aria-label="textarea"
                         placeholder="Decrypted Secret..."
-                        style={{ width: "100%", height: 300 }}
+                        style={{ height: 200, padding: 10, borderRadius: 4 }}
                         readOnly
                         value={data}
                     />
-                    <Button variant="outlined" color="primary" onClick={handleCopyToShare}>
-                        Copy to Share.
-                    </Button>
-                    {reShare && (<Button variant="outlined" color="primary" onClick={() => navigate("/")}>
-                        Share another secret.
-                    </Button>)}
+                    <StyledButton variant="outlined" color="primary" onClick={handleCopyToShare}>
+                        Copy to Share
+                    </StyledButton>
+                    {reShare && (<StyledButton variant="outlined" color="primary" onClick={() => navigate("/")}>
+                        Share another secret
+                    </StyledButton>)}
                 </Stack>
             </Box>
         </Drawer>

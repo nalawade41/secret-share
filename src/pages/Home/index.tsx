@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from "react";
-import {Grid, Box, Alert, Snackbar} from "@mui/material";
+import {useEffect, useState} from "react";
+import {Grid, Alert, Snackbar, Typography, Container} from "@mui/material";
 import SecretForm from "../../components/SecretForm";
-import {SecretFormData} from "../../types/components/secretForm";
+import type {SecretFormData} from "../../types/components/secretForm";
 import logo from "../../assets/logo.svg";
-import "./index.css";
 import axios from "axios";
 import SecretShareSidebar from "../../components/SecretShareSidebar";
 import {BASE_URL} from "../../constants/constant";
+import Image from "../../components/Image";
 
 const Home: React.FC = () => {
     const [openSidebar, setOpenSidebar] = useState<boolean>(false);
@@ -48,14 +48,21 @@ const Home: React.FC = () => {
     };
 
     return (
-        <Box id="home" sx={{ flexGrow: 1 }}>
+        <Container>
             <SecretShareSidebar open={openSidebar} setOpen={setOpenSidebar} data={sidebarData} />
-            <Grid container spacing={0} alignItems="center" className="homeContainer">
-                <Grid item xs={12} md={5} className="logoContainer">
-                    <img src={logo} alt="Secret Share Logo" className="logo" />
+            <Grid container alignItems="center" direction="column" p={8}>
+                <Grid item>
+                    <Typography gutterBottom variant='header'>
+                        Let's get your secret salted
+                    </Typography>
                 </Grid>
-                <Grid item xs={12} md={6} className="formContainer">
-                    <SecretForm onFormSubmit={handleFormSubmit} />
+                <Grid container>
+                    <Grid item xs={12} md={6}>
+                        <Image src={logo} alt="Secret Share Logo" />
+                    </Grid>
+                    <Grid item xs={12} md={6} m="auto">
+                        <SecretForm onFormSubmit={handleFormSubmit} />
+                    </Grid>
                 </Grid>
             </Grid>
             <Snackbar
@@ -68,7 +75,7 @@ const Home: React.FC = () => {
                     {error}
                 </Alert>
             </Snackbar>
-        </Box>
+        </Container>
     );
 };
 

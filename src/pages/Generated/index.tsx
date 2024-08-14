@@ -1,15 +1,17 @@
-import React, {useState} from "react";
-import {Box, Button, Grid} from "@mui/material";
+import {useState} from "react";
+import {Box, Container, Grid, Typography} from "@mui/material";
 import {useParams} from "react-router-dom";
-import SecretRevelSidebar from "../../components/SecretRevealSidebar";
 import {getSecretData} from "./loader/getSecretData";
 import RevealError from "../RevealError";
-import './index.css';
+import StyledButton from "../../components/Button";
+import SecretShareSidebar from "../../components/SecretShareSidebar";
+import { BlurOverlay } from "../../components/Overlay";
+
 
 const Generated: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [openSidebar, setOpenSidebar] = useState<boolean>(false);
-    const [revealed, setRevealed] = useState<boolean>(false);
+    const [revealing, setRevealing] = useState<boolean>(false);
     const [errorCode, setErrorCode] = useState<Error | null>(null);
     const [result, setResult] = useState<SecretData | null>(null);
 
@@ -18,45 +20,43 @@ const Generated: React.FC = () => {
             setErrorCode(new Error('404'));
             return;
         }
-
+        setRevealing(true);
         getSecretData(id).then((data) => {
             if (data) {
                 setResult(data);
                 setOpenSidebar(true);
-                setRevealed(true);
             }
         }).catch((error) => {
             setErrorCode(error);
+        }).finally(() => {
+            setRevealing(false);
         });
     }
 
     return (
         <Box>
-            <div className={`blur-overlay ${openSidebar ? 'visible' : ''}`}></div>
+            { openSidebar ? <BlurOverlay />: null }
             {errorCode ? (
                 <RevealError error={errorCode} hash={id}/>
             ) : (
-                <Box>
-                    <h1>Reveal Secret!</h1>
-                    <SecretRevelSidebar open={openSidebar} setOpen={setOpenSidebar} data={result}/>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Button
-                                variant="outlined"
+                <Container>
+                    <SecretShareSidebar open={openSidebar} setOpen={setOpenSidebar} data={result} isGenerating={false} />
+                    <Grid container alignItems="center" direction="column" p={8}>
+                        <Grid item>
+                            <Typography gutterBottom variant='header'>
+                                Reveal the Magic Recipe!
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <StyledButton
                                 onClick={handleReveal}
-                                sx={{
-                                    backgroundColor: "#637a8a",
-                                    color: "#fff",
-                                    marginTop: "0.4rem",
-                                    fontWeight: "800"
-                                }}
-                                disabled={revealed}
+                                disabled={revealing}
                             >
-                                {revealed ? `Secret Revealed` : `Reveal Secret Now`}
-                            </Button>
+                                {revealing ? 'Revealing Secret...' : 'Reveal Secret Now'}
+                            </StyledButton>
                         </Grid>
                     </Grid>
-                </Box>
+                </Container>
             )}
         </Box>
     );

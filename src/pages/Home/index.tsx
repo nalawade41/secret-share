@@ -7,6 +7,7 @@ import axios from "axios";
 import SecretShareSidebar from "../../components/SecretShareSidebar";
 import {BASE_URL} from "../../constants/constant";
 import Image from "../../components/Image";
+import { SecretData } from '../../types/models/secret';
 
 const Home: React.FC = () => {
     const [openSidebar, setOpenSidebar] = useState<boolean>(false);

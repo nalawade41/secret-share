@@ -2,6 +2,8 @@ import {useEffect, useState} from 'react';
 import { Box} from '@mui/material';
 import Sidebar from "../Sidebar";
 import { DecryptMessage } from '../../utilities/encryption/decoding';
+import { SecretData } from '../../types/models/secret';
+import { SecretShareSidebarProps } from '../../types/components/secretShareSidebar';
 
 const getSecretData = (data: SecretData) => {
     if (!data) return '';

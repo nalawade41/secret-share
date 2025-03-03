@@ -1,4 +1,4 @@
-interface SidebarProps {
+export interface SidebarProps {
     open: boolean;
     setOpen: (state: boolean) => void;
     data: string;
@@ -7,4 +7,3 @@ interface SidebarProps {
     subTitle: string;
     isPersisted: boolean;
 }
-

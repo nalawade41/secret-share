@@ -1,6 +1,7 @@
 // Define the return type of the API function
 import axios from "axios";
 import {BASE_URL} from "../../../constants/constant";
+import { SecretData } from '../../../types/models/secret';
 
 export const getSecretData = async (id: string): Promise<SecretData> => {
     try {

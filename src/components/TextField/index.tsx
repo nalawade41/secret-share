@@ -1,19 +1,22 @@
 import { TextField } from '@mui/material';
 import styled from '@emotion/styled';
+import type { ExtendedTheme } from '../../types/theme';
+import type { FormInputProps } from '../../types/components/form';
 
-const StyledTextField = styled(TextField)`
-    background-color: #b7d3d1;
-    border-radius: 4px;
-    & .MuiOutlinedInput-root {
-        border: none;
+const StyledTextField = styled(TextField)<FormInputProps>`
+  & .MuiOutlinedInput-root {
+    transition: all 200ms ease;
+    &.Mui-focused {
+      transform: translateY(-2px);
     }
-    & .MuiOutlinedInput-notchedOutline {
-        border: none;
-    }
-    & .MuiInputLabel-root {
-        font-size: 1.2rem; /* Adjust the size as needed */
-        font-weight: bold; /* Makes the label bold */
-    }
+  }
+  & .MuiInputLabel-root {
+    transition: all 200ms ease;
+  }
+  & .MuiInputLabel-root.Mui-focused {
+    transform: translate(14px, -9px) scale(0.75);
+    color: ${({ theme }) => theme.palette.primary.main};
+  }
 `;
 
 export default StyledTextField;
